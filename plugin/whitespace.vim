@@ -71,10 +71,22 @@ function s:ToggleStripWhiteSpaceOnSave()
 endfunction
 
 function s:HighlightOtherLines()
-    let currline = line('.')
-    execute 'match ExtraWhiteSpace /\v' .
-        \ '%<' . currline . 'l\s+$|' .
-        \ '%>' . currline . 'l\s+$/'
+    let l:currLine = line('.')
+    let l:shouldExecMatch = 0
+    if !exists('b:prev_edit_line')
+        let b:prev_edit_line = l:currLine
+        let l:shouldExecMatch = 1
+    endif
+    if l:currLine != b:prev_edit_line
+        let l:shouldExecMatch = 1
+    endif
+    let b:prev_edit_line = l:currLine
+
+    if l:shouldExecMatch == 1
+        execute 'match ExtraWhiteSpace /\v' .
+            \ '%<' . l:currLine . 'l\s+$|' .
+            \ '%>' . l:currLine . 'l\s+$/'
+    endif
 endfunction
 
 function! s:Setup()
