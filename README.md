@@ -13,11 +13,31 @@ Plug 'davinche/whitespace-vim'
 
 ## Usage
 
-The plugin comes with two commands:
+The plugin comes with the following commands:
+
+* Enable highlighting of trailing white spaces
+  ```
+  :EnableTrailingWhiteSpaceHighlight
+  ```
+
+* Disable highlighting of trailing white spaces
+  ```
+  :DisableTrailingWhiteSpaceHighlight
+  ```
+
+* Enable strip whitespace on save
+  ```
+  :EnableStripWhiteSpaceOnSave
+  ```
+
+* Disable strip whitespace on save
+  ```
+  :DisableStripWhiteSpaceOnSave
+  ```
 
 * To toggle trailing whitespace highlighting:
   ```
-  :ToggleHighlightWhiteSpace
+  :ToggleTrailingWhiteSpaceHighlight
   ```
 
 * To toggle stripping whitespace on save:

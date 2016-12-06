@@ -17,14 +17,24 @@ highlight ExtraWhiteSpace ctermbg = red guibg = #FF0000
 " -----------------------------------------------------------------------------
 " Highlight and Strip Functions -----------------------------------------------
 " -----------------------------------------------------------------------------
-function! s:DisableHighlight()
+function! s:DisableTrailingWhiteSpaceHighlight()
     match ExtraWhiteSpace ''
     match none
 endfunction
 
-function! s:EnableHighlight()
+function! s:EnableTrailingWhiteSpaceHighlight()
     match ExtraWhiteSpace ''
     match ExtraWhiteSpace /\s\+$/
+endfunction
+
+function! s:EnableStripWhiteSpaceOnSave()
+    let b:strip_whitespace_on_save = 1
+    call s:Setup()
+endfunction
+
+function! s:DisableStripWhiteSpaceOnSave()
+    let b:strip_whitespace_on_save = 0
+    call s:Setup()
 endfunction
 
 function! s:StripWhiteSpace(line1, line2)
@@ -36,28 +46,27 @@ function! s:StripWhiteSpace(line1, line2)
     call cursor(l, c)
 endfunction
 
-function s:ToggleHighlightWhiteSpace()
+function s:ToggleTrailingWhiteSpaceHighlight()
     if b:highlight_whitespace == 1
         let b:highlight_whitespace = 0
         let msg = 'OFF'
-        call s:DisableHighlight()
+        call s:DisableTrailingWhiteSpaceHighlight()
     else
         let msg = 'ON'
         let b:highlight_whitespace = 1
-        call s:EnableHighlight()
+        call s:EnableTrailingWhiteSpaceHighlight()
     endif
     echo 'WhiteSpace Highlight [' . msg . ']'
 endfunction
 
-function s:ToggleStripWhitespaceOnSave()
+function s:ToggleStripWhiteSpaceOnSave()
     if b:strip_whitespace_on_save == 1
-        let b:strip_whitespace_on_save = 0
+        call s:DisableStripWhiteSpaceOnSave()
         let msg = 'OFF'
     else
-        let b:strip_whitespace_on_save = 1
+        call s:EnableStripWhiteSpaceOnSave()
         let msg = 'ON'
     endif
-    call s:Setup()
     echo 'StripWhiteSpaceOnSave [' . msg . ']'
 endfunction
 
@@ -78,7 +87,7 @@ function! s:Setup()
     endif
 
     if b:highlight_whitespace == 1
-        call s:EnableHighlight()
+        call s:EnableTrailingWhiteSpaceHighlight()
     endif
 
     augroup HighlightOnEdit
@@ -98,5 +107,9 @@ endfunction
 autocmd WinEnter,BufWinEnter * call s:Setup()
 
 " Setup Commands --------------------------------------------------------------
-command ToggleHighlightWhiteSpace call s:ToggleHighlightWhiteSpace()
-command ToggleStripWhitespaceOnSave call s:ToggleStripWhitespaceOnSave()
+command EnableTrailingWhiteSpaceHighlight call s:EnableTrailingWhiteSpaceHighlight()
+command DisableTrailingWhiteSpaceHighlight call s:DisableTrailingWhiteSpaceHighlight()
+command EnableStripWhiteSpaceOnSave call s:EnableStripWhiteSpaceOnSave()
+command DisableStripWhiteSpaceOnSave call s:DisableStripWhiteSpaceOnSave()
+command ToggleTrailingWhiteSpaceHighlight call s:ToggleTrailingWhiteSpaceHighlight()
+command ToggleStripWhiteSpaceOnSave call s:ToggleStripWhiteSpaceOnSave()
