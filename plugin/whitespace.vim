@@ -74,7 +74,6 @@ function s:HighlightOtherLines()
     let l:currLine = line('.')
     let l:shouldExecMatch = 0
     if !exists('b:prev_edit_line')
-        let b:prev_edit_line = l:currLine
         let l:shouldExecMatch = 1
     endif
     if l:currLine != b:prev_edit_line
