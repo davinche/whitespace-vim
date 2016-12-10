@@ -46,7 +46,7 @@ function! s:StripWhiteSpace(line1, line2)
     call cursor(l, c)
 endfunction
 
-function s:ToggleTrailingWhiteSpaceHighlight()
+function! s:ToggleTrailingWhiteSpaceHighlight()
     if b:highlight_whitespace == 1
         let b:highlight_whitespace = 0
         let msg = 'OFF'
@@ -59,7 +59,7 @@ function s:ToggleTrailingWhiteSpaceHighlight()
     echo 'WhiteSpace Highlight [' . msg . ']'
 endfunction
 
-function s:ToggleStripWhiteSpaceOnSave()
+function! s:ToggleStripWhiteSpaceOnSave()
     if b:strip_whitespace_on_save == 1
         call s:DisableStripWhiteSpaceOnSave()
         let msg = 'OFF'
@@ -70,22 +70,22 @@ function s:ToggleStripWhiteSpaceOnSave()
     echo 'StripWhiteSpaceOnSave [' . msg . ']'
 endfunction
 
-function s:HighlightOtherLines()
+function! s:HighlightOtherLines()
     let l:currLine = line('.')
-    let l:shouldExecMatch = 0
     if !exists('b:prev_edit_line')
-        let l:shouldExecMatch = 1
+        let b:prev_edit_line = l:currLine
+        call s:MatchOtherLines(l:currLine)
     endif
     if l:currLine != b:prev_edit_line
-        let l:shouldExecMatch = 1
+        call s:MatchOtherLines(l:currLine)
+        let b:prev_edit_line = l:currLine
     endif
-    let b:prev_edit_line = l:currLine
+endfunction
 
-    if l:shouldExecMatch == 1
-        execute 'match ExtraWhiteSpace /\v' .
-            \ '%<' . l:currLine . 'l\s+$|' .
-            \ '%>' . l:currLine . 'l\s+$/'
-    endif
+function! s:MatchOtherLines(currLine)
+    execute 'match ExtraWhiteSpace /\v' .
+                \ '%<' . a:currLine . 'l\s+$|' .
+                \ '%>' . a:currLine . 'l\s+$/'
 endfunction
 
 function! s:Setup()
